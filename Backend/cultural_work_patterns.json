@@ -1,0 +1,241 @@
+{
+    "work_patterns": {
+        "US": {
+            "work_start": 9,
+            "work_end": 17,
+            "core_hours_start": 10,
+            "core_hours_end": 15,
+            "overnight_shift": false
+        },
+        "JP": {
+            "work_start": 8,
+            "work_end": 20,
+            "core_hours_start": 10,
+            "core_hours_end": 18,
+            "overnight_shift": false
+        }
+    },
+    "metadata": {
+      "version": "4.2.0",
+      "last_updated": "2023-11-15T16:30:00Z",
+      "data_sources": [
+        "ILO Standards",
+        "OECD Work Trends",
+        "Deepseek-CulturalMatrix",
+        "Remote.com API"
+      ],
+      "coverage": {
+        "work_cultures": 78,
+        "management_styles": 45,
+        "conflict_resolution_methods": 32
+      }
+    },
+    "cultural_work_matrix": {
+      "global_work_norms": {
+        "communication_preferences": {
+          "direct": ["NL", "DE", "IL"],
+          "indirect": ["JP", "KR", "TH"],
+          "contextual": ["FR", "BR", "MX"]
+        },
+        "decision_making": {
+          "consensus": ["SE", "FI", "JP"],
+          "hierarchical": ["KR", "SA", "IN"],
+          "data_driven": ["US", "SG", "DE"]
+        },
+        "feedback_culture": {
+          "explicit": ["US", "AU", "IL"],
+          "implicit": ["CN", "JP", "KR"],
+          "structured": ["DE", "CH", "SE"]
+        }
+      },
+      "regional_workflows": {
+        "north_america": {
+          "meeting_cadence": "timeboxed_30-60min",
+          "after_hours_communication": "generally_acceptable",
+          "vacation_norms": "2-3_week_blocks"
+        },
+        "asia_pacific": {
+          "relationship_building": "essential_prework",
+          "negotiation_styles": "long-term_focus",
+          "overtime_culture": "common_but_regulated"
+        },
+        "middle_east": {
+          "work_week": "Sun-Thu",
+          "ramadan_adaptations": "compressed_hours",
+          "relationship_hierarchy": "age_respected"
+        }
+      },
+      "city_work_signatures": {
+        "tech_hubs": {
+          "SF": "flat_hierarchy",
+          "BLR": "flexible_deadlines",
+          "TLV": "direct_challenge"
+        },
+        "financial_centers": {
+          "NYC": "rapid_pace",
+          "LON": "formal_documentation",
+          "HK": "hybrid_east_west"
+        }
+      }
+    },
+    "automation_engine": {
+      "work_pattern_analysis": {
+        "deepseek_algorithms": {
+          "cultural_friction_detector": "v3.1",
+          "work_rhythm_matcher": "neural_sync_v2"
+        },
+        "conflict_prediction": {
+          "triggers": [
+            "decision_style_mismatch",
+            "feedback_approach_divergence >40%",
+            "time_perception_gap >2h"
+          ]
+        }
+      },
+      "adaptive_scheduling": {
+        "meeting_optimizer": {
+          "parameters": [
+            "cultural_energy_cycles",
+            "focus_time_protection",
+            "timezone_equity"
+          ]
+        },
+        "deadline_calculator": {
+          "cultural_buffers": {
+            "monochronic": "+0%",
+            "polychronic": "+15%"
+          }
+        }
+      }
+    },
+    "compliance_guardrails": {
+      "legal_frameworks": {
+        "EU": {
+          "work_hours": "48h/week_max",
+          "rest_breaks": "11h_daily"
+        },
+        "JP": {
+          "karoshi_prevention": "max_45h_overtime/month"
+        },
+        "AE": {
+          "friday_work_rules": "4h_max"
+        }
+      },
+      "cultural_protections": {
+        "religious_observances": "auto_schedule_pause",
+        "national_pride_days": "flag_in_platform"
+      }
+    },
+    "rlg_ai_features": {
+      "cultural_navigator": {
+        "real-time_guidance": {
+          "communication_tone": "context-aware_adjustment",
+          "conflict_de-escalation": "culture-specific_phrases"
+        },
+        "pre-meeting_briefs": {
+          "BR": "build_personal_rapport",
+          "DE": "stick_to_agenda",
+          "IN": "allow_consensus_building"
+        }
+      },
+      "productivity_advisor": {
+        "focus_zone_calculator": "deepseek_flow_state_v1",
+        "collaboration_health": {
+          "metrics": [
+            "decision_velocity",
+            "async_effectiveness",
+            "cultural_inclusion_index"
+          ]
+        }
+      }
+    },
+    "integration_modules": {
+      "project_management": {
+        "jira": "cultural_deadline_adjustments",
+        "asana": "relationship_building_reminders"
+      },
+      "communication": {
+        "slack": "cultural_tone_analysis",
+        "teams": "meeting_formality_score"
+      },
+      "hr_systems": {
+        "bambooHR": "cultural_onboarding_paths",
+        "workday": "compliance_alerts"
+      }
+    },
+    "reporting_suite": {
+      "team_dynamics": {
+        "cultural_heatmaps": {
+          "communication_channels": "preferred_methods_matrix",
+          "conflict_resolution": "style_alignment"
+        },
+        "productivity_analytics": {
+          "deepseek_insights": [
+            "cultural_synergy_score",
+            "global_rhythm_index"
+          ]
+        }
+      },
+      "individual_analytics": {
+        "work_pattern_matching": "team_culture_fit%",
+        "growth_recommendations": "cultural_agility_path"
+      }
+    },
+    "personalization_framework": {
+      "user_profiles": {
+        "work_archetypes": {
+          "task_master": "structured_schedules",
+          "collaborator": "high_meeting_density",
+          "deep_worker": "focus_blocks"
+        },
+        "cultural_comfort": {
+          "adaptation_scores": [
+            "directness_tolerance",
+            "hierarchy_preference",
+            "ambiguity_comfort"
+          ]
+        }
+      },
+      "adaptation_engine": {
+        "learning_system": "deepseek_cultural_ai",
+        "feedback_loops": [
+          "weekly_cultural_tips",
+          "real-time_work_pattern_adjustments"
+        ]
+      }
+    },
+    "scalability_config": {
+      "performance": {
+        "max_cultural_profiles": "1M+",
+        "analysis_latency": "<500ms"
+      },
+      "data_architecture": {
+        "pattern_storage": "regionalized_cache",
+        "update_cycles": "daily_cultural_updates"
+      }
+    },
+    "competitive_edge": {
+      "vs_cultural_map": [
+        "real-time_work_analytics",
+        "AI-powered conflict prevention",
+        "productivity integration"
+      ],
+      "vs_globeSmart": [
+        "free_tier_availability",
+        "developer_api_first",
+        "deep_project_management_sync"
+      ]
+    },
+    "enhancement_roadmap": {
+      "q1_2024": [
+        "AR virtual office layouts",
+        "Blockchain work pattern audit",
+        "AI cultural mentor 24/7"
+      ],
+      "q3_2024": [
+        "Neurodiversity adaptations",
+        "Climate-impact scheduling",
+        "Global payday sync"
+      ]
+    }
+  }

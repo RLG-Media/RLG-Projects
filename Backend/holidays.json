@@ -1,0 +1,210 @@
+{
+    "metadata": {
+      "version": "5.3.0",
+      "last_updated": "2023-11-15T17:45:00Z",
+      "data_sources": [
+        "Nager.Date API",
+        "UN Observances",
+        "GeoNames",
+        "Deepseek-TemporalAI"
+      ],
+      "coverage": {
+        "countries": 249,
+        "states_provinces": 3800,
+        "cities": 15000
+      }
+    },
+    "holiday_framework": {
+      "global_structure": {
+        "holiday_types": {
+          "public": ["federal", "state", "municipal"],
+          "religious": {
+            "christian": ["Christmas", "Easter"],
+            "islamic": ["Eid al-Fitr", "Eid al-Adha"],
+            "hindu": ["Diwali", "Holi"],
+            "other": ["Chinese New Year", "Rosh Hashanah"]
+          },
+          "observance": ["Earth Day", "Int'l Workers' Day"]
+        },
+        "regional_priorities": {
+          "EMEA": ["religious_diversity", "summer_breaks"],
+          "APAC": ["lunar_calendar", "harvest_festivals"],
+          "AMER": ["indigenous_observances", "federal_variations"]
+        }
+      },
+      "country_specific": {
+        "US": {
+          "federal_holidays": {
+            "New Year's Day": "01-01",
+            "Juneteenth": "06-19",
+            "Thanksgiving": "4th Thu/11"
+          },
+          "state_variations": {
+            "TX": ["Texas Independence Day: 03-02"],
+            "CA": ["César Chávez Day: 03-31"]
+          }
+        },
+        "IN": {
+          "national_holidays": {
+            "Republic Day": "01-26",
+            "Gandhi Jayanti": "10-02"
+          },
+          "regional_holidays": {
+            "MH": ["Gudi Padwa: lunar"],
+            "TN": ["Pongal: 01-14"]
+          }
+        },
+        "DE": {
+          "state_holidays": {
+            "BY": ["Epiphany: 01-06"],
+            "SN": ["Reformation Day: 10-31"]
+          }
+        }
+      },
+      "city_exceptions": {
+        "NEW_ORLEANS": {
+          "Mardi Gras": "mobile_feb"
+        },
+        "MUNICH": {
+          "Oktoberfest": "third_Sat/09"
+        },
+        "RIO": {
+          "Carnival": "47d pre_easter"
+        }
+      }
+    },
+    "automation_system": {
+      "update_engine": {
+        "sources": {
+          "api_sync": ["Nager.Date", "Google Calendar"],
+          "user_submissions": "crowd-verified"
+        },
+        "validation": {
+          "deepseek_check": "temporal_plausibility_v4",
+          "conflict_resolution": "majority_vote+official_sources"
+        }
+      },
+      "scheduling_ai": {
+        "deadline_calculator": {
+          "algorithm": "Deepseek-Projection v2.3",
+          "rules": {
+            "global_teams": "nearest_workday",
+            "critical_path": "3d_buffer"
+          }
+        },
+        "meeting_optimizer": {
+          "blackout_detection": "auto-reschedule",
+          "timezone_fairness": "rotation_system"
+        }
+      }
+    },
+    "compliance_features": {
+      "regional_rules": {
+        "EU": {
+          "mandatory_leave": "20d/annual",
+          "public_holiday_comp": "1.5x pay"
+        },
+        "SA": {
+          "ramadan_hours": "-30% workload"
+        },
+        "JP": {
+          "golden_week": "consecutive_holiday_protection"
+        }
+      },
+      "reporting_suite": {
+        "annual_summary": {
+          "workday_calculation": "locale_aware",
+          "compliance_audit": "missing_holiday_flags"
+        }
+      }
+    },
+    "rlg_ai_services": {
+      "holiday_chatbot": {
+        "query_handling": {
+          "entitlements": "vacation_day_calculator",
+          "cultural_guidance": "gift-giving_rules"
+        },
+        "proactive_alerts": {
+          "pre_holiday_checklist": ["deadlines", "handovers"],
+          "cultural_coaching": "1w_advance_tips"
+        }
+      },
+      "global_sync": {
+        "team_calendar": {
+          "overlap_analysis": "Deepseek-Grid v1.7",
+          "fairness_index": "timezone_rotation_score"
+        }
+      }
+    },
+    "integration_modules": {
+      "calendars": {
+        "google_calendar": "two-way_sync",
+        "outlook": "holiday_layer"
+      },
+      "project_management": {
+        "jira": "deadline_adjustments",
+        "asana": "milestone_buffer"
+      },
+      "communication": {
+        "slack": "pre-holiday_reminders",
+        "teams": "out_of_office_sync"
+      }
+    },
+    "personalization_engine": {
+      "user_profiles": {
+        "work_patterns": {
+          "nomadic": "dynamic_location_update",
+          "hybrid": "office/home_calendars"
+        },
+        "cultural_preferences": {
+          "observance_level": ["strict", "flexible", "secular"]
+        }
+      },
+      "adaptive_system": {
+        "learning_algorithm": "Deepseek-Pattern v3.1",
+        "feedback_loop": "holiday_relevance_scores"
+      }
+    },
+    "scalability_config": {
+      "performance": {
+        "max_locations": "1M+",
+        "real_time_updates": "<1s latency"
+      },
+      "data_management": {
+        "caching_strategy": "region-tiered",
+        "update_frequency": "daily_patches"
+      }
+    },
+    "competitive_edge": {
+      "vs_google_calendar": [
+        "sub-national holidays",
+        "cultural compliance",
+        "AI-powered scheduling"
+      ],
+      "vs_world_holidays": [
+        "city-level accuracy",
+        "dynamic conflict resolution",
+        "team synchronization"
+      ]
+    },
+    "enhancement_roadmap": {
+      "q2_2024": [
+        "Blockchain holiday verification",
+        "AR holiday visualizer",
+        "Climate-impact scheduling"
+      ],
+      "q4_2024": [
+        "Indigenous calendar integration",
+        "AI gift recommendation engine",
+        "Global payroll sync"
+      ]
+    },
+    "validation_suite": {
+      "syntax_check": "jsonlint holidays.json",
+      "data_tests": [
+        "country_coverage_audit",
+        "mobile_holiday_consistency",
+        "timezone_conflict_simulation"
+      ]
+    }
+  }

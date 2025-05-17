@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-sprint-mode="adaptive" data-team-context="global">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RLG Sprint Master - AI-Powered Agile Planning">
+    
+    <!-- Core Agile Resources -->
+    <title data-i18n="sprint.title">RLG Sprint Intelligence - Global Agile Control</title>
+    <link rel="stylesheet" href="https://cdn.rlgprojects.io/css/sprint.css">
+    <script src="https://cdn.rlgprojects.io/js/deepseek-agile.js"></script>
+    
+    <!-- Visualization & AI -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.rlgprojects.io/js/ai-gantt.js"></script>
+</head>
+
+<body class="sprint-planning" aria-labelledby="mainSprintHeading">
+    <!-- AI Context Bar -->
+    <div class="planning-context">
+        <div class="sprint-metadata">
+            <span id="timezoneSync" aria-live="polite"></span>
+            <span id="culturalConstraints"></span>
+        </div>
+        <div class="ai-controls">
+            <button class="ai-optimize" data-i18n="sprint.optimize">AI Auto-Scope</button>
+            <button class="ai-analyze" data-i18n="sprint.analyze">Risk Analysis</button>
+        </div>
+    </div>
+
+    <!-- Main Planning Interface -->
+    <main class="sprint-container" role="main">
+        <!-- Sprint Setup Wizard -->
+        <section class="sprint-wizard" aria-labelledby="wizardTitle">
+            <div class="wizard-header">
+                <h1 id="mainSprintHeading" data-i18n="sprint.heading">Global Sprint Design</h1>
+                <div class="sprint-presets">
+                    <button class="preset" data-preset="basic" data-i18n="sprint.presetBasic">Basic Sprint</button>
+                    <button class="preset" data-preset="complex" data-i18n="sprint.presetComplex">Multi-Region</button>
+                    <button class="preset" data-preset="compliance" data-i18n="sprint.presetCompliance">Regulated</button>
+                </div>
+            </div>
+
+            <!-- AI-Powered Configuration -->
+            <div class="sprint-configurator">
+                <div class="ai-assist-config">
+                    <input type="text" 
+                           id="sprintPrompt"
+                           data-i18n="sprint.prompt"
+                           placeholder="Describe sprint goals..."
+                           aria-label="Sprint input">
+                    <button id="generatePlan" data-i18n="sprint.generate">Deepseek Plan</button>
+                </div>
+                
+                <div class="constraint-filters">
+                    <div class="region-selector">
+                        <label data-i18n="sprint.regions">Target Regions:</label>
+                        <select multiple id="regions">
+                            <option value="EMEA">EMEA</option>
+                            <option value="APAC">APAC</option>
+                        </select>
+                    </div>
+                    <div class="compliance-checker">
+                        <span data-i18n="sprint.compliance">Active Compliance:</span>
+                        <div id="liveCompliance"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dual-Pane Planning Interface -->
+        <div class="planning-grid">
+            <!-- Backlog Intelligence -->
+            <section class="backlog-manager" aria-labelledby="backlogTitle">
+                <h2 id="backlogTitle" data-i18n="sprint.backlog">AI-Prioritized Backlog</h2>
+                <div class="ai-backlog">
+                    <div class="backlog-filters">
+                        <input type="text" id="backlogSearch" data-i18n="sprint.search">
+                        <button class="ai-sort" data-i18n="sprint.sort">Smart Sort</button>
+                    </div>
+                    <div id="backlogList" class="backlog-items"></div>
+                    <div class="ai-recommendations"></div>
+                </div>
+            </section>
+
+            <!-- Sprint Canvas -->
+            <section class="sprint-canvas" aria-labelledby="canvasTitle">
+                <h2 id="canvasTitle" data-i18n="sprint.canvas">Sprint Architecture</h2>
+                <div class="timeline-view" id="ganttChart"></div>
+                <div class="capacity-meter">
+                    <div class="meter-labels">
+                        <span data-i18n="sprint.capacity">Team Capacity:</span>
+                        <span id="capacityValue">0%</span>
+                    </div>
+                    <div class="meter-bar" id="capacityBar"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Cultural Adaptation Panel -->
+        <section class="cultural-panel" aria-labelledby="culturalTitle">
+            <h2 id="culturalTitle" data-i18n="sprint.culture">Regional Considerations</h2>
+            <div class="cultural-factors">
+                <div class="holiday-warnings"></div>
+                <div class="timezone-overlap"></div>
+                <div class="communication-patterns"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- AI Planning Assistant -->
+    <aside class="planning-assistant" aria-label="Sprint assistant">
+        <div class="assistant-header">
+            <h2 data-i18n="sprint.assistant">RLG Sprint Agent</h2>
+            <div class="assistant-modes">
+                <button class="mode-strategy" data-i18n="sprint.strategy">Strategy</button>
+                <button class="mode-tactical" data-i18n="sprint.tactical">Tactical</button>
+            </div>
+        </div>
+        <div class="assistant-chat" id="planningChat"></div>
+    </aside>
+
+    <!-- Core Scripts -->
+    <script nonce="rlgSprint">
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialize AI Sprint Engine
+        RLGSprint.init({
+            apiKey: 'FREE_TIER_RLG_AGILE',
+            features: {
+                autoScoping: true,
+                riskPrediction: true,
+                culturalAdaptation: true
+            },
+            limits: {
+                maxTeams: 20,
+                maxSprints: 5,
+                maxTasks: 1000
+            }
+        });
+
+        // Load cultural context
+        CulturalPlanner.init({
+            regionalHolidays: true,
+            timezoneAware: true,
+            workPatterns: 'auto'
+        });
+
+        // Initialize visualization
+        SprintVisualizer.initGantt({
+            container: '#ganttChart',
+            resolution: 'days',
+            locale: 'auto'
+        });
+    });
+    </script>
+</body>
+</html>

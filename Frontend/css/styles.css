@@ -1,0 +1,182 @@
+/* RLG DESIGN SYSTEM v5.8 */
+/* AI-Enhanced, Culturally-Adaptive Styling */
+
+:root {
+    /* Core Design Tokens */
+    --color-primary: #2F80ED;
+    --color-secondary: #9B51E0;
+    --color-success: #27AE60;
+    --color-warning: #F2C94C;
+    --color-danger: #EB5757;
+    
+    /* Cultural Adaptation Variables */
+    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Space Grotesk', var(--font-body);
+    --line-height: 1.6;
+    --spacing-unit: 1rem;
+    --border-radius: 0.5rem;
+    
+    /* Global Compliance */
+    --contrast-ratio: 4.5;  /* WCAG AA standard */
+    --focus-ring: 0 0 0 3px rgba(47, 128, 237, 0.5);
+    
+    /* Theming System */
+    --background: #FFFFFF;
+    --text: #2D3436;
+    --surface: #F8F9FA;
+    --border: #DFE6E9;
+  }
+  
+  [data-theme="dark"] {
+    --background: #2D3436;
+    --text: #F8F9FA;
+    --surface: #3B4345;
+    --border: #4A5255;
+  }
+  
+  /* Cultural Layout Adaptations */
+  [dir="rtl"] {
+    --font-body: 'Cairo', system-ui, sans-serif;
+    --text-align: right;
+  }
+  
+  /* Base Reset & Accessibility */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  body {
+    font-family: var(--font-body);
+    line-height: var(--line-height);
+    color: var(--text);
+    background: var(--background);
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* AI-Optimized Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    margin: calc(var(--spacing-unit) * 1.5) 0;
+    line-height: 1.2;
+  }
+  
+  /* Compliance-First Components */
+  .button {
+    display: inline-flex;
+    align-items: center;
+    padding: calc(var(--spacing-unit) * 0.75) var(--spacing-unit);
+    border-radius: var(--border-radius);
+    border: 1px solid transparent;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .button-primary {
+    background: var(--color-primary);
+    color: white;
+  }
+  
+  .button:focus {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+  
+  /* Cultural Grid System */
+  .grid {
+    display: grid;
+    gap: var(--spacing-unit);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  
+  /* AI Chat Interface */
+  .rlg-chat {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: min(90vw, 400px);
+    background: var(--surface);
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  }
+  
+  /* Data Visualization Enhancements */
+  .chart-container {
+    position: relative;
+    padding: var(--spacing-unit);
+    background: var(--surface);
+    border-radius: var(--border-radius);
+  }
+  
+  /* Compliance Overrides */
+  [data-compliance="GDPR"] .analytics-tracker {
+    display: none !important;
+  }
+  
+  /* Responsive Breakpoints */
+  @media (max-width: 768px) {
+    :root {
+      --spacing-unit: 0.75rem;
+      --font-size-base: 14px;
+    }
+    
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Global Animations */
+  @keyframes ai-loading {
+    0% { opacity: 0.4; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  .ai-processing {
+    animation: ai-loading 0.6s ease infinite alternate;
+  }
+  
+  /* RTL Overrides */
+  [dir="rtl"] {
+    direction: rtl;
+    
+    .button svg {
+      margin-right: 0;
+      margin-left: 0.5em;
+    }
+  }
+  
+  /* Accessibility Enhancements */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+  
+  /* Competitive Feature Flags */
+  [data-feature="3d-viz"] .chart-container {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+  
+  /* Performance Optimizations */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }

@@ -1,0 +1,330 @@
+# ========================
+# GLOBAL CONFIGURATION
+# ========================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rlg-prod
+  labels:
+    compliance-tier: gdpr-level2
+    ai-enabled: "true"
+
+---
+# ========================
+# CORE APPLICATION DEPLOYMENT
+# ========================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rlg-web
+  namespace: rlg-prod
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 15%
+  selector:
+    matchLabels:
+      app: rlg-web
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: rlg-web
+        ai-integrated: "true"
+        compliance-scanned: "true"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+      - name: rlg-core
+        image: rlg-projects/core:7.2
+        ports:
+        - containerPort: 8888
+        envFrom:
+        - configMapRef:
+            name: global-config
+        - secretRef:
+            name: api-credentials
+        resources:
+          limits:
+            cpu: "1"
+            memory: 2Gi
+          requests:
+            cpu: "0.5"
+            memory: 1Gi
+        volumeMounts:
+        - name: ai-models
+          mountPath: /app/ai-models
+        - name: localization
+          mountPath: /app/locales
+      volumes:
+      - name: ai-models
+        persistentVolumeClaim:
+          claimName: ai-model-store
+      - name: localization
+        configMap:
+          name: i18n-config
+
+---
+# ========================
+# DEEPSEEK AI SERVICE
+# ========================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rlg-ai
+  namespace: rlg-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      service: ai-engine
+  template:
+    metadata:
+      labels:
+        service: ai-engine
+        compliance: verified
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: cloud.google.com/gke-accelerator
+                operator: Exists
+      containers:
+      - name: deepseek-ai
+        image: deepseek/rlg-ai:v7.2
+        ports:
+        - containerPort: 5000
+        env:
+        - name: AI_MODEL
+          value: "rlgspec-7b-chat-v2"
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            memory: 8Gi
+          requests:
+            memory: 4Gi
+
+---
+# ========================
+# COMPLIANCE MONITORING STACK
+# ========================
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: compliance-monitor
+  namespace: rlg-prod
+spec:
+  serviceName: "compliance-service"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: compliance-engine
+  template:
+    metadata:
+      labels:
+        app: compliance-engine
+    spec:
+      containers:
+      - name: compliance-core
+        image: ghcr.io/rlg/compliance:v3.1
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: compliance-rules
+          mountPath: /app/rules
+        args: ["--region-aware", "--auto-remediate"]
+      volumes:
+      - name: compliance-rules
+        configMap:
+          name: compliance-config
+
+---
+# ========================
+# GLOBAL NETWORKING
+# ========================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rlg-global-ingress
+  namespace: rlg-prod
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - app.rlgprojects.io
+    secretName: rlg-tls-prod
+  rules:
+  - host: app.rlgprojects.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rlg-web
+            port:
+              number: 8888
+
+---
+# ========================
+# RLG AGENT SYSTEM
+# ========================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rlg-chatbot
+  namespace: rlg-prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rlg-agent
+  template:
+    metadata:
+      labels:
+        app: rlg-agent
+        version: v2.3
+    spec:
+      containers:
+      - name: chatbot
+        image: rlgprojects/agent:3.1
+        ports:
+        - containerPort: 5050
+        env:
+        - name: PERSONALIZATION_LEVEL
+          value: "high"
+        - name: LANGUAGE_SUPPORT
+          value: "en,es,fr,de,zh"
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "python /app/graceful_shutdown.py"]
+
+---
+# ========================
+# OBSERVABILITY & ANALYTICS
+# ========================
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rlg-monitor
+  namespace: rlg-prod
+spec:
+  selector:
+    matchLabels:
+      app: rlg-web
+  endpoints:
+  - port: web
+    interval: 30s
+    path: /metrics
+
+---
+# ========================
+# AUTOSCALING CONFIGURATION
+# ========================
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rlg-web-autoscaler
+  namespace: rlg-prod
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rlg-web
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+# ========================
+# COMPLIANCE & SECURITY
+# ========================
+apiVersion: policy/v1
+kind: PodSecurityPolicy
+metadata:
+  name: rlg-psp
+spec:
+  privileged: false
+  runAsUser:
+    rule: MustRunAsNonRoot
+  seLinux:
+    rule: RunAsAny
+  volumes:
+  - configMap
+  - secret
+  - persistentVolumeClaim
+
+---
+# ========================
+# PERSISTENT STORAGE
+# ========================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ai-model-store
+  namespace: rlg-prod
+spec:
+  accessModes:
+  - ReadOnlyMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: standard-rwo
+
+---
+# ========================
+# CONFIGURATION MANAGEMENT
+# ========================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: i18n-config
+  namespace: rlg-prod
+data:
+  supported_languages: "en,es,fr,de,zh,hi,ar"
+  timezone_map: |
+    {
+      "EMEA": "Europe/London",
+      "APAC": "Asia/Singapore",
+      "AMER": "America/New_York"
+    }
+
+---
+# ========================
+# SECRETS MANAGEMENT
+# ========================
+apiVersion: v1
+kind: Secret
+metadata:
+  name: api-credentials
+  namespace: rlg-prod
+type: Opaque
+data:
+  deepseek-key: BASE64_ENCODED_FREE_TIER_KEY
+  compliance-api-token: BASE64_ENCODED_TOKEN
+
+  # FUTURE ADDITIONS:
+# apiVersion: rlg.ai/v1alpha1
+# kind: AIAutoScaler
+# spec:
+#   modelVersion: rlgspec-7b-chat-v2
+#   regionalWeights:
+#     EMEA: 40
+#     APAC: 35
+#     AMER: 25

@@ -1,0 +1,205 @@
+{
+    "testDataProfile": {
+      "purpose": "Comprehensive validation dataset for RLG Projects monitoring system",
+      "schemaVersion": "1.4",
+      "lastGenerated": "2023-10-25T14:30:00Z",
+      "dataEngine": "DeepSeek Synthetic Data Generator v2.1"
+    },
+  
+    "regionalData": {
+      "SADC": {
+        "countries": {
+          "ZA": {
+            "name": "South Africa",
+            "cities": {
+              "JHN": {
+                "name": "Johannesburg",
+                "economicIndicators": {
+                  "gdpGrowth": 0.8,
+                  "unemploymentRate": 32.6,
+                  "techSectorGrowth": 4.2
+                },
+                "teamDistribution": {
+                  "developers": 45,
+                  "managers": 8,
+                  "designers": 12
+                },
+                "projectMetrics": {
+                  "activeProjects": 15,
+                  "atRiskProjects": 2,
+                  "completedThisMonth": 5
+                }
+              }
+            }
+          }
+        }
+      },
+      "EAC": {
+        "countries": {
+          "KE": {
+            "name": "Kenya",
+            "complianceStatus": {
+              "GDPR": "compliant",
+              "localRegulations": {
+                "dataProtectionAct": true,
+                "cyberSecurity": "partial"
+              }
+            }
+          }
+        }
+      }
+    },
+  
+    "complianceRecords": [
+      {
+        "caseId": "GDPR-CHK-20231025-001",
+        "checkType": "automated",
+        "status": "passed",
+        "flaggedIssues": [],
+        "auditTrail": {
+          "timestamp": "2023-10-25T09:15:00Z",
+          "actions": [
+            "autoVerified data encryption",
+            "cookie consent validation"
+          ]
+        }
+      },
+      {
+        "caseId": "ISO27001-20231025-002",
+        "checkType": "semi-automated",
+        "status": "requiresAttention",
+        "flaggedIssues": [
+          "documentationGap: incidentResponsePlan"
+        ],
+        "resolutionPath": "/compliance/workflow/ISO27001-20231025-002"
+      }
+    ],
+  
+    "aiAnalytics": {
+      "predictiveModels": {
+        "resourceAllocation": {
+          "prediction": {
+            "nextMonthNeeds": {
+              "developers": "+3",
+              "cloudCredits": "15% increase"
+            },
+            "confidenceScore": 0.87
+          },
+          "trainingData": {
+            "sources": ["Jira", "GitHub", "Slack"],
+            "freshness": "24h"
+          }
+        }
+      },
+      "anomalyDetection": {
+        "recentAlerts": [
+          {
+            "id": "ANOM-20231025-1",
+            "type": "unusualCommitPattern",
+            "severity": "medium",
+            "project": "RLG-Core",
+            "recommendedAction": "Review PR#2341"
+          }
+        ]
+      }
+    },
+  
+    "userCollaboration": {
+      "activeProjects": {
+        "RLG-Core": {
+          "sprintProgress": {
+            "currentSprint": "Sprint 23",
+            "completedStories": 15,
+            "remainingPoints": 32
+          },
+          "teamSentiment": {
+            "positive": 68,
+            "neutral": 25,
+            "negative": 7
+          }
+        }
+      },
+      "rlgChatbotLogs": [
+        {
+          "sessionId": "CHAT-20231025-1",
+          "query": "Show blocked tasks in Nairobi projects",
+          "response": {
+            "action": "jiraFilter Applied",
+            "results": 3,
+            "deepseekConfidence": 0.92
+          }
+        }
+      ]
+    },
+  
+    "performanceMetrics": {
+      "systemHealth": {
+        "apiResponseTimes": {
+          "WorldBankAPI": "420ms",
+          "DeepSeekAPI": "380ms"
+        },
+        "errorRates": {
+          "last24h": 0.15,
+          "trend": "improving"
+        }
+      },
+      "uptimeStats": {
+        "currentMonth": 99.98,
+        "slaCompliance": "withinTarget"
+      }
+    },
+  
+    "localizationTests": {
+      "multilingualSupport": {
+        "supportedLanguages": ["en", "sw", "fr", "pt"],
+        "translationCoverage": {
+          "uiElements": 100,
+          "userContent": 82
+        }
+      },
+      "timezoneHandling": {
+        "simultaneousEvents": {
+          "eventId": "RLG-ALLHANDS-202310",
+          "timezoneConversion": {
+            "original": "UTC+2",
+            "converted": {
+              "NYC": "08:00 EDT",
+              "LON": "13:00 BST",
+              "NBO": "15:00 EAT"
+            }
+          }
+        }
+      }
+    },
+  
+    "enhancementRecommendations": {
+      "syntheticDataGeneration": {
+        "script": "utils/generate_test_data.py",
+        "parameters": {
+          "scaleFactor": 1.5,
+          "regionalVariants": ["SADC", "EAC", "ECOWAS"]
+        }
+      },
+      "validationRules": {
+        "dataIntegrity": [
+          {"rule": "countryCodeFormat", "pattern": "^[A-Z]{2}$"},
+          {"rule": "percentageRange", "min": 0, "max": 100}
+        ]
+      }
+    },
+  
+    "documentationLinks": {
+      "dataDictionary": "/docs/test_data_spec",
+      "validationGuide": "/qa/load_testing_protocol"
+    },
+  
+    "maintenanceMode": {
+      "autoRecoveryTests": [
+        {
+          "testId": "RECOV-001",
+          "scenario": "API Failure Fallback",
+          "result": "cachedDataServed"
+        }
+      ]
+    }
+  }

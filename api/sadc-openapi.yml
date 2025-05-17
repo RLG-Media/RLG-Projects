@@ -1,0 +1,238 @@
+openapi: 3.1.0
+info:
+  title: RLG Projects SADC API
+  version: 2.4.0
+  description: |
+    Unified API for pan-African project management with AI-enhanced capabilities,
+    regional compliance automation, and hybrid team collaboration features.
+  contact:
+    name: RLG API Support
+    url: https://support.rlgprojects.africa
+    email: api-support@rlg.africa
+  license:
+    name: RLG Community License
+    url: https://license.rlgprojects.africa
+
+servers:
+  - url: https://api.rlgprojects.africa/v1
+    description: Production SADC cluster
+  - url: https://sandbox.api.rlgprojects.africa/v1
+    description: Testing environment
+
+tags:
+  - name: Regional Data
+    description: Geographic hierarchy and economic indicators
+  - name: Project Core
+    description: Sprint management and team coordination
+  - name: AI Insights
+    description: DeepSeek-powered predictive analytics
+  - name: Compliance
+    description: Automated regulatory checks
+  - name: Collaboration
+    description: Real-time team communication tools
+
+paths:
+  /regions/{region}/countries:
+    get:
+      tags: [Regional Data]
+      summary: Get country-level metrics
+      parameters:
+        - $ref: '#/components/parameters/regionParam'
+        - name: economicThreshold
+          in: query
+          schema:
+            type: number
+          description: Minimum GDP growth percentage filter
+      responses:
+        200:
+          description: Regional country data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountryMetrics'
+              example:
+                ZA:
+                  gdpGrowth: 0.8
+                  activeProjects: 150
+                  complianceStatus: "GDPR_OK"
+
+  /projects/{projectId}/sprints:
+    post:
+      tags: [Project Core]
+      summary: Create AI-optimized sprint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SprintConfig'
+      responses:
+        201:
+          description: Sprint created with AI recommendations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SprintPlan'
+
+  /ai/predictive-resourcing:
+    post:
+      tags: [AI Insights]
+      summary: Predict team resource needs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceQuery'
+      responses:
+        200:
+          description: DeepSeek-generated resource forecast
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcePrediction'
+
+  /compliance/auto-check:
+    post:
+      tags: [Compliance]
+      summary: Automated regulatory check
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplianceCheckRequest'
+      responses:
+        200:
+          description: Compliance audit results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceReport'
+
+  /chatbot/query:
+    websocket:
+      tags: [Collaboration]
+      summary: RLG Agent Chatbot interface
+      description: Bidirectional communication channel with AI assistant
+      parameters:
+        - name: locale
+          in: query
+          schema:
+            type: string
+            enum: [en, fr, pt, sw]
+      message:
+        oneOf:
+          - $ref: '#/components/schemas/ChatbotQuery'
+          - $ref: '#/components/schemas/ChatbotResponse'
+
+components:
+  schemas:
+    CountryMetrics:
+      type: object
+      properties:
+        economicIndicators:
+          $ref: '#/components/schemas/EconomicData'
+        teamDistribution:
+          type: object
+          properties:
+            developers: { type: integer }
+            managers: { type: integer }
+        complianceStatus:
+          type: string
+          enum: [GDPR_OK, GDPR_WARN, ISO27001_OK]
+
+    SprintConfig:
+      type: object
+      required: [teamSize, complexity]
+      properties:
+        teamSize: { type: integer }
+        complexity: { type: number, format: float }
+        regionalConstraints:
+          $ref: '#/components/schemas/RegionalConfig'
+
+    ResourcePrediction:
+      type: object
+      properties:
+        forecast:
+          type: array
+          items: $ref: '#/components/schemas/RoleForecast'
+        confidence: { type: number }
+
+    ComplianceReport:
+      type: object
+      properties:
+        passedChecks: { type: array, items: { type: string } }
+        warnings: { type: array, items: $ref: '#/components/schemas/ComplianceWarning' }
+
+    ChatbotQuery:
+      type: object
+      properties:
+        message: { type: string }
+        context: { type: string }
+
+  parameters:
+    regionParam:
+      name: region
+      in: path
+      required: true
+      schema:
+        type: string
+        enum: [SADC, EAC, ECOWAS]
+
+  securitySchemes:
+    RLG_OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.rlgprojects.africa/oauth
+          tokenUrl: https://auth.rlgprojects.africa/token
+          scopes:
+            project.read: Read project data
+            compliance.write: Modify compliance settings
+
+x-competitive-edge:
+  features:
+    - realTimeRegionalAnalytics: "Sub-regional granularity (city/town level)"
+    - aiAugmentation: "DeepSeek-powered decision support"
+    - complianceAutomation: "Auto-updating regulatory framework"
+  competitorGaps:
+    CompetitorX: ["No regional localization", "Basic API rate limits"]
+    CompetitorY: ["Paid compliance checks", "No websocket support"]
+
+x-deepseek-integration:
+  aiServices:
+    - naturalLanguageProcessing: "v2.1-contextual"
+    - predictiveAnalytics: "monteCarlo-v3"
+    - anomalyDetection: "pattern-recognition-4.0"
+  endpoints:
+    - /ai/predictive-resourcing
+    - /chatbot/query
+
+x-validation-rules:
+  schemaValidation: "https://api.rlgprojects.africa/validate-schema"
+  loadTestResults: "https://qa.rlgprojects.africa/reports/api-load-2023Q4"
+
+x-regional-specs:
+  dateFormats:
+    SADC: "DD/MM/YYYY"
+    EAC: "YYYY-MM-DD"
+  currencyHandling:
+    ZAR: { format: "R{{amount}}", decimal: 2 }
+    KES: { format: "KSh{{amount}}", decimal: 0
+
+x-enhancements:
+  autoScaling:
+    rateLimits: 
+      freeTier: "1000 req/hour"
+      burstCapacity: "500 req/10sec"
+    horizontalScaling: "Kubernetes cluster auto-scaling"
+  localization:
+    dynamicContent: "XLIFF 2.0 standard"
+    fallbackChains: ["en -> sw -> fr -> pt"]
+
+x-monitoring:
+  performanceSLA:
+    responseTime: "p95 < 800ms"
+    uptime: "99.95%"
+  healthCheck: "/system/status"

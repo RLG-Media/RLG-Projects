@@ -1,0 +1,162 @@
+version: '3.8'
+services:
+  # ========================
+  # CORE APPLICATION SERVICES
+  # ========================
+  web:
+    image: node:18-alpine
+    container_name: rlg-web
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - rlg-net
+    command: ["npm", "run", "start:prod"]
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+
+  # ========================
+  # AI & COMPLIANCE ENGINE
+  # ========================
+  ai-core:
+    image: deepseek/rlg-ai:v7.2
+    container_name: rlg-ai
+    env_file: .env
+    environment:
+      - AI_MODEL=rlgspec-7b-chat-v2
+      - COMPLIANCE_MODE=strict
+    ports:
+      - "5000:5000"
+    networks:
+      - rlg-net
+    volumes:
+      - ai-models:/app/models
+    depends_on:
+      - db-postgres
+      - cache
+
+  # ========================
+  # DATABASE SERVICES
+  # ========================
+  db-postgres:
+    image: postgres:15-alpine
+    container_name: rlg-db
+    env_file: .env
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - rlg-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
+      interval: 5s
+
+  db-mongo:
+    image: mongo:6
+    container_name: rlg-mongo
+    env_file: .env
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - rlg-net
+    command: ["--wiredTigerCacheSizeGB=1"]
+
+  # ========================
+  # CACHING & QUEUES
+  # ========================
+  cache:
+    image: redis:7-alpine
+    container_name: rlg-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - rlg-net
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+
+  # ========================
+  # COMPLIANCE MONITORING
+  # ========================
+  compliance-watch:
+    image: ghcr.io/rlg/compliance-monitor:latest
+    container_name: rlg-compliance
+    env_file: .env
+    networks:
+      - rlg-net
+    depends_on:
+      - ai-core
+      - db-postgres
+
+  # ========================
+  # INTERNATIONALIZATION
+  # ========================
+  i18n-service:
+    image: rlg/i18n-worker:v3.1
+    container_name: rlg-i18n
+    env_file: .env
+    networks:
+      - rlg-net
+    volumes:
+      - ./locales:/app/locales
+
+  # ========================
+  # RLG AGENT SYSTEM
+  # ========================
+  chatbot:
+    image: python:3.11-slim
+    container_name: rlg-chatbot
+    env_file: .env
+    networks:
+      - rlg-net
+    command: ["python", "agent/core.py"]
+    volumes:
+      - ./ai-agent:/app
+    depends_on:
+      - ai-core
+
+  # ========================
+  # OBSERVABILITY STACK
+  # ========================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: rlg-prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - rlg-net
+    volumes:
+      - ./devops/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana-oss:9.5
+    container_name: rlg-grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - rlg-net
+    depends_on:
+      - prometheus
+
+# ========================
+# INFRASTRUCTURE CONFIG
+# ========================
+networks:
+  rlg-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  pg-data:
+  mongo-data:
+  redis-data:
+  ai-models:

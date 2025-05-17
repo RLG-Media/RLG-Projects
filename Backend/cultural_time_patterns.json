@@ -1,0 +1,215 @@
+{
+    "metadata": {
+      "version": "3.1.0",
+      "last_updated": "2023-11-15T15:47:00Z",
+      "data_sources": ["GeoNames", "UNESCO", "Nager.Date", "Deepseek-Cultural"],
+      "coverage": {
+        "countries": 193,
+        "languages": 87,
+        "timezones": 423
+      }
+    },
+    "cultural_framework": {
+      "global_time_norms": {
+        "work_hours": {
+          "northern_europe": "08:00-16:30",
+          "southern_europe": "09:00-17:30",
+          "north_america": "08:30-17:00",
+          "asia_pacific": "10:00-19:00",
+          "middle_east": "08:00-15:00 + 17:00-20:00"
+        },
+        "cultural_considerations": {
+          "siesta_cultures": ["ES", "MX", "AR"],
+          "ramadan_adjustments": {
+            "work_hours": "-30% duration",
+            "meeting_times": "avoid_last_2_fasting_hours"
+          },
+          "festival_blackouts": {
+            "CN": "Lunar New Year: 7d",
+            "IN": "Diwali: 5d",
+            "US": "Thanksgiving: 4d"
+          }
+        }
+      },
+      "region_specific": {
+        "EMEA": {
+          "meeting_etiquette": {
+            "punctuality": ["DE: ±2min", "FR: ±5min", "SA: ±15min"],
+            "preferred_formality": {
+              "north": "agenda_strict",
+              "south": "relationship_first"
+            }
+          }
+        },
+        "APAC": {
+          "communication_patterns": {
+            "directness_scale": ["JP: high_formal", "AU: medium_casual", "KR: medium_formal"],
+            "decision_making": ["CN: top-down", "IN: consensus", "SG: data-driven"]
+          }
+        },
+        "AMER": {
+          "time_management": {
+            "scheduling_style": {
+              "US": "timeboxed_meetings",
+              "BR": "flexible_duration",
+              "CA": "buffer_included"
+            }
+          }
+        }
+      },
+      "city_level_adjustments": {
+        "financial_hubs": {
+          "LON": "align_with NYSE/NASDAQ",
+          "NYC": "core_hours 09:30-16:00 EST",
+          "HKG": "sync_with LON/NYC overlaps"
+        },
+        "tech_hubs": {
+          "SF": "flexible_hours_common",
+          "BLR": "late_meetings_acceptable",
+          "TLV": "Sunday_work_days"
+        }
+      }
+    },
+    "automation_features": {
+      "timezone_intelligence": {
+        "conflict_detection": {
+          "algorithm": "Deepseek-TimeOpt v1.4",
+          "triggers": ["holiday_overlap", "working_hour_mismatch >2h"]
+        },
+        "smart_scheduling": {
+          "optimal_meeting_times": {
+            "parameters": ["majority_availability", "cultural_energy_peaks", "timezone_fairness"]
+          },
+          "buffer_rules": {
+            "cross_continental": "15min_pre/post",
+            "same_region": "5min_buffer"
+          }
+        }
+      },
+      "cultural_ai_assistant": {
+        "pre_meeting_tips": {
+          "jp": "Send agenda 24h in advance",
+          "br": "Allow 5min social talk start",
+          "ae": "Avoid Fridays/Saturdays"
+        },
+        "real_time_guidance": {
+          "speaking_pace": "adjust_based_on_participants",
+          "silence_interpretation": {
+            "nordic": "thinking_time",
+            "asian": "potential_disagreement"
+          }
+        }
+      }
+    },
+    "integration_modules": {
+      "calendar_systems": {
+        "gregorian": "default",
+        "lunar": ["CN", "KR", "VN"],
+        "hijri": ["SA", "AE", "EG"]
+      },
+      "tool_adapters": {
+        "slack": "timezone_status_updates",
+        "teams": "meeting_cultural_checklist",
+        "jira": "deadline_localization"
+      }
+    },
+    "reporting_engine": {
+      "team_analytics": {
+        "overlap_calculator": {
+          "core_overlap": "minimum_2h_window",
+          "urgency_levels": {
+            "red": "<1h_overlap",
+            "amber": "1-2h_overlap",
+            "green": ">2h_overlap"
+          }
+        },
+        "cultural_heatmaps": {
+          "communication_styles": "direct/indirect_matrix",
+          "decision_speed": "consensus/autocratic_scale"
+        }
+      },
+      "meeting_impact": {
+        "productivity_score": {
+          "factors": ["timezone_span", "cultural_alignment", "recurrence_frequency"]
+        },
+        "fatigue_predictor": "Deepseek-StressIndex"
+      }
+    },
+    "personalization_engine": {
+      "user_profiles": {
+        "chronotypes": {
+          "early_bird": "06:00-15:00",
+          "night_owl": "10:00-19:00",
+          "global_nomad": "flexible_highlights"
+        },
+        "cultural_archetypes": {
+          "monochronic": "timeboxed_tasks",
+          "polychronic": "parallel_processing"
+        }
+      },
+      "adaptation_rules": {
+        "learning_algorithm": "Deepseek-CulturoAdapt v2.1",
+        "feedback_loop": "weekly_cultural_insights"
+      }
+    },
+    "compliance_features": {
+      "legal_time_rules": {
+        "EU": "working_time_directive",
+        "CA": "overtime_after_44h",
+        "JP": "karoshi_prevention_laws"
+      },
+      "religious_observances": {
+        "auto_blocking": ["prayer_times", "sabbath", "festivals"],
+        "sensitivity_alerts": "Deepseek-CulturalGuard"
+      }
+    },
+    "localization_settings": {
+      "date_formats": {
+        "iso": "YYYY-MM-DD",
+        "regional": {
+          "US": "MM/DD/YYYY",
+          "EU": "DD/MM/YYYY",
+          "ASIA": "YYYY/MM/DD"
+        }
+      },
+      "time_display": {
+        "clock_systems": ["12h", "24h"],
+        "precision_levels": ["minutes", "quarters", "halves"]
+      }
+    },
+    "scalability_config": {
+      "performance": {
+        "max_teams": 5000,
+        "real_time_updates": "50ms latency cap"
+      },
+      "data_management": {
+        "caching_strategy": "regional_time_patterns",
+        "update_frequency": "15min_refresh_cycle"
+      }
+    },
+    "RLG_enhancements": {
+      "competitive_advantages": {
+        "vs_world_time_buddy": ["AI predictions", "cultural depth"],
+        "vs_google_calendar": ["fatigue analytics", "legal compliance"]
+      },
+      "agent_features": {
+        "chatbot_skills": [
+          "timezone_mediation",
+          "cultural_icebreakers",
+          "conflict_resolution_scripts"
+        ]
+      }
+    },
+    "recommendations": {
+      "enhancements": [
+        "VR cultural immersion training",
+        "Blockchain timezone audit trail",
+        "AI-powered siesta/nap scheduler"
+      ],
+      "integrations": [
+        "UN public holiday API",
+        "Slack status auto-sync",
+        "Zoom background cultural suggestions"
+      ]
+    }
+  }

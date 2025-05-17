@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.2">
+  <hashTree>
+    <!-- Test Plan Configuration -->
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="RLG Africa Load Test" enabled="true">
+      <stringProp name="TestPlan.comments">Comprehensive load testing for pan-African operations</stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Region Parameters" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="REGION" elementType="Argument">
+            <stringProp name="Argument.name">REGION</stringProp>
+            <stringProp name="Argument.value">SADC</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="MAX_USERS" elementType="Argument">
+            <stringProp name="Argument.name">MAX_USERS</stringProp>
+            <stringProp name="Argument.value">1000</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+    </TestPlan>
+    <hashTree/>
+
+    <!-- Regional Traffic Simulation -->
+    <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SADC User Group" enabled="true">
+      <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+      <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+        <boolProp name="LoopController.continue_forever">false</boolProp>
+        <stringProp name="LoopController.loops">-1</stringProp>
+      </elementProp>
+      <stringProp name="ThreadGroup.num_threads">${__P(MAX_USERS,500)}</stringProp>
+      <stringProp name="ThreadGroup.ramp_time">300</stringProp>
+      <boolProp name="ThreadGroup.scheduler">true</boolProp>
+      <stringProp name="ThreadGroup.duration">3600</stringProp>
+      <stringProp name="ThreadGroup.delay">0</stringProp>
+    </ThreadGroup>
+    <hashTree>
+      <!-- Data-Driven Regional Parameters -->
+      <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Africa Regions CSV" enabled="true">
+        <stringProp name="delimiter">,</stringProp>
+        <stringProp name="fileEncoding">UTF-8</stringProp>
+        <stringProp name="filename">config/regions.csv</stringProp>
+        <boolProp name="ignoreFirstLine">true</boolProp>
+        <boolProp name="quotedData">false</boolProp>
+        <stringProp name="recycle">true</stringProp>
+        <stringProp name="shareMode">shareMode.all</stringProp>
+        <stringProp name="variableNames">region,country,city,projectId,userRole</stringProp>
+      </CSVDataSet>
+      
+      <!-- AI Chatbot Stress Test -->
+      <WebSocketSampler guiclass="WebSocketSamplerGui" testclass="WebSocketSampler" testname="RLG Chatbot Simulation" enabled="true">
+        <stringProp name="WebSocketSampler.streamingConnection">true</stringProp>
+        <stringProp name="WebSocketSampler.protocol">wss</stringProp>
+        <stringProp name="WebSocketSampler.server">api.rlgprojects.africa</stringProp>
+        <stringProp name="WebSocketSampler.port">443</stringProp>
+        <stringProp name="WebSocketSampler.path">/chatbot/query?locale=${__chooseRandom(en,fr,pt,sw)}</stringProp>
+        <stringProp name="WebSocketSampler.requestData">{
+          "message": "${__chooseRandom(Show risks,Check compliance,Team sentiment)} for ${projectId}",
+          "context": "${region}::${country}::${city}"
+        }</stringProp>
+        <stringProp name="WebSocketSampler.responsePattern"></stringProp>
+        <stringProp name="WebSocketSampler.closeConnectionPattern"></stringProp>
+        <stringProp name="WebSocketSampler.messageBacklog">2</stringProp>
+      </WebSocketSampler>
+      
+      <!-- Compliance Check Flood -->
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Auto Compliance Check" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">false</boolProp>
+              <stringProp name="Argument.value">{
+                "region": "${region}",
+                "project": "${projectId}",
+                "checkTypes": ["GDPR", "Local-${country}"]
+              }</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain">api.rlgprojects.africa</stringProp>
+        <stringProp name="HTTPSampler.port">443</stringProp>
+        <stringProp name="HTTPSampler.protocol">https</stringProp>
+        <stringProp name="HTTPSampler.path">/compliance/auto-check</stringProp>
+        <stringProp name="HTTPSampler.method">POST</stringProp>
+      </HTTPSamplerProxy>
+
+      <!-- Performance Monitoring -->
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename">reports/load_test_summary.csv</stringProp>
+      </ResultCollector>
+    </hashTree>
+
+    <!-- Enhanced Assertions -->
+    <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Regional Compliance Assertion" enabled="true">
+      <collectionProp name="Asserion.test_strings">
+        <stringProp name="49586">"region":"${region}"</stringProp>
+      </collectionProp>
+      <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+      <boolProp name="Assertion.assume_success">false</boolProp>
+      <intProp name="Assertion.test_type">16</intProp>
+    </ResponseAssertion>
+
+    <!-- AI Model Performance Check -->
+    <JSR223Assertion guiclass="JSR223AssertionGui" testclass="JSR223Assertion" testname="DeepSeek Response Validation" enabled="true">
+      <stringProp name="scriptLanguage">groovy</stringProp>
+      <stringProp name="script">import groovy.json.JsonSlurper
+def response = prev.getResponseDataAsString()
+def json = new JsonSlurper().parseText(response)
+
+if (vars.get('SamplerLabel').contains('AI')) {
+  assert json.confidenceScore >= 0.7 : "AI confidence below threshold"
+  assert json.predictions.size() > 0 : "Empty AI predictions"
+}</stringProp>
+    </JSR223Assertion>
+
+    <!-- Real-Time Monitoring -->
+    <BackendListener guiclass="BackendListenerGui" testclass="BackendListener" testname="Grafana Live Dashboard" enabled="true">
+      <elementProp name="arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="influxdbUrl" elementType="Argument">
+            <stringProp name="Argument.name">influxdbUrl</stringProp>
+            <stringProp name="Argument.value">http://monitoring.rlg.africa:8086</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="classname">org.apache.jmeter.visualizers.backend.influxdb.InfluxdbBackendListenerClient</stringProp>
+    </BackendListener>
+  </hashTree>
+</jmeterTestPlan>
+
+<!-- Random API shutdown simulation -->
+<JSR223PreProcessor>
+  <script>
+  if (Math.random() < 0.01) {
+    ctx.getEngine().stopTest()
+  }
+  </script>
+</JSR223PreProcessor>
+
+<!-- Calculate cloud costs per transaction -->
+<JSR223PostProcessor>
+  <script>
+  def cost = (prev.getTime() * 0.0001) + (prev.getBytes() * 0.0000001)
+  vars.put("transactionCost", cost.toString())
+  </script>
+</JSR223PostProcessor>

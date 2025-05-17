@@ -1,0 +1,196 @@
+---
+# RLG Pan-African Infrastructure Orchestrator
+# Version: 2.4.1 | Region-Aware AI-Driven Deployment
+
+- name: Configure RLG Africa Nodes
+  hosts: all
+  become: yes
+  vars:
+    region_config:
+      SADC:
+        timezone: Africa/Johannesburg
+        compliance_profile: gdpr_africa
+        ai_model: deepseek/sadc-v2.1
+      EAC:
+        timezone: Africa/Nairobi
+        compliance_profile: east_africa_cyber
+        ai_model: deepseek/eac-v1.8
+    node_roles:
+      management: ["api", "db", "monitoring"]
+      ai_worker: ["nlp", "predictive", "analytics"]
+      compliance: ["gdpr", "local_laws", "audit"]
+
+  pre_tasks:
+    - name: Validate region classification
+      assert:
+        that: region in region_config.keys()
+        msg: "Unsupported region! Valid: {{ region_config.keys()|list }}"
+
+  tasks:
+    # Core Infrastructure
+    - name: Configure regional time
+      timezone:
+        name: "{{ region_config[region].timezone }}"
+    
+    - name: Install localized packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - python3.10
+        - docker-ce
+        - ufw
+        - fail2ban
+        - tzdata
+      when: ansible_os_family == 'Debian'
+
+    # AI Infrastructure
+    - name: Deploy DeepSeek AI models
+      docker_container:
+        name: rlg-ai-core
+        image: "{{ region_config[region].ai_model }}"
+        ports: "8501:8501"
+        env:
+          AWS_ACCESS_KEY_ID: "{{ s3_access }}"
+          AWS_SECRET_ACCESS_KEY: "{{ s3_secret }}"
+        volumes: "/mnt/ai_models:/models"
+    
+    - name: Configure AI auto-scaling
+      copy:
+        content: |
+          [Unit]
+          Description=RLG AI Scaler
+          [Service]
+          ExecStart=/usr/bin/python3 /opt/rlg/ai_scaler.py
+          [Install]
+          WantedBy=multi-user.target          
+        dest: /etc/systemd/system/rlg-ai-scaler.service
+      notify: reload systemd
+
+    # Compliance Engine
+    - name: Apply regional firewall rules
+      ufw:
+        rule: "{{ item.rule }}"
+        direction: "{{ item.direction }}"
+      loop:
+        - { rule: allow, direction: in, port: 443 }
+        - { rule: allow, direction: in, port: 22 }
+        - { rule: deny, direction: in, port: 3306 }
+    
+    - name: Deploy compliance scanner
+      git:
+        repo: https://github.com/rlg-compliance/auto-validator.git
+        dest: /opt/compliance-engine
+        version: "{{ compliance_branch }}"
+    
+    # Monitoring Stack
+    - name: Configure Prometheus exporters
+      include_role:
+        name: cloudalchemy.prometheus
+      vars:
+        prometheus_targets:
+          node: [9100]
+          ai: [9200]
+          compliance: [9300]
+    
+    - name: Deploy Grafana analytics
+      docker_container:
+        name: grafana
+        image: grafana/grafana-oss:9.4.7
+        ports: "3000:3000"
+        env:
+          GF_INSTALL_PLUGINS: "grafana-worldmap-panel"
+
+    # Localization Layer
+    - name: Configure regional language packs
+      community.general.locale_gen:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ region_languages }}"
+    
+    - name: Set default system locale
+      community.general.locale:
+        lang: "{{ region_config[region].locale }}"
+
+    # Security Automation
+    - name: Apply CIS benchmarks
+      include_role:
+        name: dev-sec.cis-dil-benchmark
+      vars:
+        cis_level: 2
+    
+    - name: Initialize Let's Encrypt
+      shell: |
+        certbot certonly --standalone -d {{ ansible_fqdn }} 
+        --non-interactive --agree-tos 
+        --email security@rlg.africa
+      when: "'management' in group_names"
+
+  post_tasks:
+    - name: Validate node readiness
+      uri:
+        url: "http://localhost:9200/health"
+        return_content: yes
+      register: health_check
+      until: "'ai_ready' in health_check.content"
+      retries: 5
+      delay: 30
+
+    - name: Generate node report
+      template:
+        src: templates/node-report.j2
+        dest: /var/log/rlg-init.log
+
+  handlers:
+    - name: reload systemd
+      systemd:
+        daemon_reload: yes
+    
+    - name: restart ai core
+      docker_container:
+        name: rlg-ai-core
+        state: restarted
+
+  vars_files:
+    - vars/regional-defaults.yml
+    - vars/ai-credentials.yml
+
+    # Region-Specific Configurations
+region_languages:
+  SADC: ["en_ZA.UTF-8", "st_ZA.UTF-8", "tn_ZA.UTF-8"]
+  EAC: ["sw_KE.UTF-8", "en_KE.UTF-8"]
+
+compliance_profiles:
+  gdpr_africa:
+    rules: 
+      - data_encryption
+      - cookie_consent
+  east_africa_cyber:
+    rules:
+      - data_localization
+      - cyber_act_2022
+
+monitoring_endpoints:
+  SADC: "monitor.sadc.rlg.africa"
+  EAC: "monitor.eac.rlg.africa"
+
+  - name: Introduce network latency
+  community.general.netscaler:
+    delay: "{{ 100 | random(step=10) }}ms"
+    interface: eth0
+    when: "'chaos_test' in group_names"
+
+- name: Apply spot instance pricing
+  shell: |
+    aws ec2 modify-instance-attribute \
+    --instance-id $(curl -s http://169.254.169.254/latest/meta-data/instance-id) \
+    --instance-market-options MarketType=spot
+  when: cloud_provider == 'aws'
+
+- name: Deploy DeepSeek anomaly detector
+  docker_container:
+    name: ai-watcher
+    image: deepseek/selfheal:2.1
+    env:
+      THRESHOLD: 0.85
+      ACTION: "restart_service"

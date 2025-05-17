@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-rlg-mode="light" data-region="auto" data-compliance="strict">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'nonce-rlgLogin' 'strict-dynamic'">
+    
+    <title data-i18n="login.title">RLG Secure Login - Global Team Access</title>
+    
+    <!-- Core Security -->
+    <link rel="stylesheet" href="https://cdn.rlgprojects.io/css/auth.css">
+    <script nonce="rlgLogin" src="https://cdn.rlgprojects.io/js/auth-essentials.js"></script>
+    
+    <!-- AI & Compliance -->
+    <link rel="privacy-policy" href="/compliance/login-policy">
+    <script nonce="rlgLogin" src="https://ai.rlgprojects.io/deepseek-auth.js"></script>
+
+    <!-- Globalization -->
+    <script nonce="rlgLogin" type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "AuthenticationPortal",
+        "name": "RLG Secure Access",
+        "description": "Global team authentication with AI-powered security"
+    }
+    </script>
+</head>
+
+<body class="auth-page" aria-labelledby="mainLoginHeading">
+    <!-- Cultural Context Bar -->
+    <div class="context-bar">
+        <div class="region-info">
+            <span id="detectedRegion"></span>
+            <span id="complianceStatus" aria-live="polite"></span>
+        </div>
+        <div class="language-switcher">
+            <select id="authLanguage" aria-label="Select language">
+                <option value="auto">Auto (AI Detected)</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="zh">中文</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Main Auth Container -->
+    <main class="auth-container" role="main">
+        <!-- Security Headers -->
+        <div class="security-status">
+            <span class="ssl-status">TLS 1.3 Secured</span>
+            <span class="mfa-status" data-i18n="login.mfa">AI-Powered MFA</span>
+        </div>
+
+        <!-- Login Form -->
+        <form id="rlgLoginForm" class="auth-form" method="POST" action="/auth/login" aria-label="Login form">
+            <h1 id="mainLoginHeading" data-i18n="login.heading">Global Team Login</h1>
+            
+            <!-- AI Threat Detection -->
+            <div id="threatAlert" class="ai-alert" role="alert" hidden></div>
+
+            <!-- Credential Inputs -->
+            <div class="input-group">
+                <label for="email" data-i18n="login.email">Work Email</label>
+                <input type="email" 
+                       id="email" 
+                       name="email"
+                       autocomplete="username"
+                       required
+                       data-ai-validation="email"
+                       aria-describedby="emailHelp">
+                <div id="emailHelp" class="ai-feedback"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="password" data-i18n="login.password">Password</label>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       autocomplete="current-password"
+                       required
+                       data-ai-validation="password"
+                       aria-describedby="passwordHelp">
+                <div id="passwordHelp" class="ai-strength-meter"></div>
+            </div>
+
+            <!-- AI Security Factors -->
+            <div class="ai-auth-options">
+                <div class="ai-remember">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember" data-i18n="login.remember">Secure Device Memory</label>
+                </div>
+                
+                <div class="ai-captcha">
+                    <div id="aiCaptcha" 
+                         class="deepseek-captcha"
+                         data-challenge="login"
+                         aria-live="polite">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compliance Agreement -->
+            <div class="compliance-agreement">
+                <input type="checkbox" id="complianceAgree" required>
+                <label for="complianceAgree" data-i18n="login.compliance">
+                    I agree to regional data processing per 
+                    <a href="/compliance" target="_blank">GDPR/CCPA</a> standards
+                </label>
+            </div>
+
+            <button type="submit" 
+                    class="auth-submit"
+                    data-i18n="login.submit">
+                Secure Login
+            </button>
+        </form>
+
+        <!-- Alternative Auth -->
+        <div class="auth-alt-options">
+            <a href="/mfa" class="ai-recovery" data-i18n="login.mfaHelp">
+                AI-Powered Recovery
+            </a>
+            <div class="auth-social">
+                <button class="sso-google" data-i18n="login.ssoGoogle">Google SSO</button>
+                <button class="sso-microsoft" data-i18n="login.ssoMsft">Microsoft SSO</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Real-Time Compliance Monitor -->
+    <aside class="compliance-feed" aria-label="Compliance updates">
+        <div class="compliance-header">
+            <h2 data-i18n="login.complianceTitle">Active Protections</h2>
+        </div>
+        <div id="complianceFeed" class="compliance-items"></div>
+    </aside>
+
+    <!-- AI Assistant & Security -->
+    <div class="auth-assistant">
+        <button class="ai-help" aria-expanded="false">
+            <span data-i18n="login.assistant">RLG Security Assistant</span>
+        </button>
+        <div class="assistant-content" hidden>
+            <div id="authChat" role="log"></div>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script nonce="rlgLogin">
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialize AI Security
+        RLGAuth.init({
+            apiKey: 'FREE_TIER_RLG_AUTH',
+            features: {
+                threatDetection: true,
+                passwordAnalysis: true,
+                complianceMonitoring: true
+            },
+            compliance: {
+                gdpr: true,
+                ccpa: true,
+                regionalOverrides: true
+            }
+        });
+
+        // Initialize cultural adaptation
+        CulturalAuthAdapter.init({
+            autoDetect: true,
+            fallbackLanguage: 'en',
+            dateFormat: 'regional'
+        });
+
+        // Load real-time compliance status
+        ComplianceFeed.init({
+            refreshInterval: 30,
+            regions: ['global']
+        });
+    });
+    </script>
+</body>
+</html>
